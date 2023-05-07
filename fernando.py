@@ -17,7 +17,7 @@ def formatUserInput(filteredUserInput):
     return finalList
 
 
-def sumBin(bin1, bin2):
+def sumBinFernando(bin1, bin2):
     overflow = 0
     somaBinario = []
     numSum = 0
@@ -39,7 +39,7 @@ archiveName = "teste.txt"
 
 userInput = readUserInput(archiveName)
 userInput = formatUserInput(userInput)
-somaBin = sumBin(userInput[0], userInput[1])
+#somaBin = sumBin(userInput[0], userInput[1])
 
 
 def main():
@@ -47,7 +47,7 @@ def main():
     #     print("Seus números não possui 32 bits ou possuem tamanhos diferentes. Mude o arquivo e tente novamente")
     # else:
     print(userInput)
-    print(somaBin)
+    #print(somaBin)
 
 
-main()
+#main()
