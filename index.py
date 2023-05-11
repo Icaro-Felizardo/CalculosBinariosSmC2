@@ -1,5 +1,4 @@
-from icaro import *
-from fernando import *
+from functions import *
 import sys
 
 
@@ -11,7 +10,7 @@ archiveName = "teste.txt"
 
 userInput = readUserInput(archiveName)
 userInput = formatUserInput(userInput)
-#subtraction = subtractionSM(userInput[0], userInput[1])
+
 
 dec1SM = convertBinToDecSM(userInput[0]);
 print(dec1SM)

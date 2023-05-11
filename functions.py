@@ -1,4 +1,23 @@
-from fernando import *
+def readUserInput(archiveName):
+    userInput = open(archiveName).readlines()
+    filteredUserInput = []
+    for i in range(len(userInput)):
+        filteredUserInput.append(userInput[i].strip())
+
+    return filteredUserInput
+
+
+def formatUserInput(filteredUserInput):
+    finalList = []
+    for i in range(len(filteredUserInput)):
+        finalList.append(list(filteredUserInput[i]))
+
+    for j in range(len(finalList)):
+        for i in range(0, len(finalList[j])):
+            finalList[j][i] = int(finalList[j][i])
+
+    return finalList
+
 def arrayToString(array):
     filteredStr = "".join(str(i) for i in array)
 
@@ -6,12 +25,12 @@ def arrayToString(array):
 def convertBintoDec(bin1):
     soma = 0
     potencia = 0
-    i = len(bin1) - 1
-    while i >= 0:
-        result = int((bin1[i]) * (2**potencia))
+    posicao = len(bin1) - 1
+    while posicao >= 0:
+        result = int((bin1[posicao]) * (2**potencia))
         soma += result
         potencia += 1
-        i = i-1
+        posicao -=1
 
     return soma;
 
@@ -58,13 +77,10 @@ def subtraction(bin1, bin2):
         position -= 1
 
     position = len(subtractionResult) - 1
-    #print("num1: ", bin1)
-    #print("num2: ", bin2)
-    #print("Subtração direta: ", subtractionResult)
+
     for digits in range(len(subtractionResult)):
         if subtractionResult[position] < 0:
             subtractionResult = borrow(subtractionResult,position)
-            #print(subtractionResult)
         position -= 1
 
     return subtractionResult
@@ -81,26 +97,32 @@ def convertBinToDecSM(bin1):
 
 
 
-def subtractionsSM(userInput):
-    bin1 = userInput[0]
-    bin2 = userInput[1]
+def subtractionsSM(binarios):
+    bin1 = binarios[0].copy()
+    bin2 = binarios[1].copy()
+
+    #inverte o sinal de Bin2
+    if bin2[0] == 0:
+        bin2[0] = 1
+    elif bin2[0] == 1:
+        bin2[0] = 0
 
     sinalBin1 = bin1[0]
     sinalBin2 = bin2[0]
+
     filteredBin1 = bin1[1:]
     filteredBin2 = bin2[1:]
 
     maior = biggerBin(filteredBin1, filteredBin2)
 
-    if sinalBin1 == 1:
+    if (sinalBin2 == 0 and sinalBin1 == 0) or (sinalBin1 == 1 and sinalBin2 == 1):
          result = sumBin(filteredBin1,filteredBin2)
 
     else:
+        print("asd")
         result = subtraction(filteredBin1,filteredBin2)
 
-
-
-    if (sinalBin1 == 1) or (maior == "bin2" and sinalBin2 == 1):
+    if (sinalBin1 == 1 and maior == "bin1" ) or (maior == "bin2" and sinalBin2 == 1):
         result.insert(0, 1)
     else:
         result.insert(0,0)
@@ -108,17 +130,10 @@ def subtractionsSM(userInput):
 
     return result;
 
-def sumBorrow(array,position):
-    if array[position] == 2:
-        array[position] = 1
-        array[position - 1] += 1
-        sumBorrow(array, (position -1))
-
-    return array
-
 def sumBin(bin1, bin2):
     position = 0
     sumResult = []
+
     for digits in range(len(bin1)):
 
         digitsSum = bin1[position] + bin2[position]
@@ -138,7 +153,6 @@ def sumBin(bin1, bin2):
             if position - 1 >= 0:  #Evita somar um no último número em caso de overflow
                 sumResult[position - 1] += 1
 
-
         position -= 1
 
 
@@ -152,10 +166,11 @@ def sumBinSm(bin1, bin2):
 
     maior = biggerBin(filteredBin1, filteredBin2)
 
-    sumResult = sumBin(filteredBin1, filteredBin2)
 
-    if (sinalBin1 or sinalBin2) == 1:
+    if (sinalBin1 == 1 and sinalBin2 == 0) or ((sinalBin1 == 0 and sinalBin2 == 1)):
         sumResult = subtraction(filteredBin1, filteredBin2)
+    else:
+        sumResult = sumBin(filteredBin1, filteredBin2)
 
     if maior == "bin1":
         sumResult.insert(0, sinalBin1)
@@ -168,11 +183,14 @@ def sumBinSm(bin1, bin2):
 def complementa2(bin1):
 
     if bin1[0] == 1:
-        bin1 = complementa2Negative(bin1)
+        bin1 = inverteBinSum1(bin1)
 
 
     return bin1;
-def complementa2Negative(binario):
+
+
+
+def inverteBinSum1(binario):
     position = 0;
     um = []
 
@@ -199,7 +217,7 @@ def c2ToDec(binario):
 
     if binario[0] == 1:
         negativo = True
-        binario = complementa2Negative(binario)
+        binario = inverteBinSum1(binario)
 
     binario = convertBintoDec(binario)
 
@@ -207,20 +225,19 @@ def c2ToDec(binario):
         binario = "-" + str(binario)
     return binario;
 
-def sumComplenta2(userInput):
-    bin1 = userInput[0]
-    bin2 = userInput[1]
+def sumComplenta2(binarios):
+    bin1 = binarios[0]
+    bin2 = binarios[1]
 
     soma = sumBin(bin1, bin2)
 
     return soma;
 
-def subtractionC2(userInput):
-    bin1 = userInput[0]
-    bin2 = userInput[1]
+def subtractionC2(binarios):
+    bin1 = binarios[0].copy()
+    bin2 = binarios[1].copy()
 
-    if bin2[0] == 0:
-        bin2 = complementa2Negative(bin2)
+    bin2 = inverteBinSum1(bin2)
 
     soma = sumBin(bin1, bin2)
 
